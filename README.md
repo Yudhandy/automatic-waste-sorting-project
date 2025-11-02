@@ -1,142 +1,142 @@
-# Proyek Pemilah Sampah Cerdas & Monitoring Ketinggian (Dual-Board)
+# Smart Waste Sorting & Level Monitoring Project (Dual-Board)
 
 ![Edge Impulse](https://img.shields.io/badge/Machine%20Learning-Edge%20Impulse-blue.svg) ![ESP32](https://img.shields.io/badge/Hardware-ESP32%20|%20ESP32--CAM-purple.svg)
 
-Proyek ini menggunakan arsitektur **dua mikrokontroler** untuk menciptakan sistem pemantauan dan pemilahan sampah yang efisien:
+This project uses a **dual-microcontroller** architecture to create an efficient waste monitoring and sorting system:
 
-1.  **Board 1: ESP32-CAM (Pemilah Sampah)**
-    * Bertanggung jawab penuh untuk tugas *Computer Vision* (TinyML).
-    * Menjalankan model **Edge Impulse** untuk mengidentifikasi sampah (misal: organik vs. anorganik).
-    * Mengontrol **Motor Servo** untuk menggerakkan aktuator pemilah.
+1.  **Board 1: ESP32-CAM (Waste Sorter)**
+    * Fully responsible for the *Computer Vision* (TinyML) task.
+    * Runs an **Edge Impulse** model to identify waste (e.g., organic vs. inorganic).
+    * Controls **Servo Motors** to operate the sorting actuator.
 
-2.  **Board 2: ESP32 (Monitoring Ketinggian)**
-    * Bertanggung jawab untuk pemantauan dan konektivitas IoT.
-    * Membaca **Sensor Ultrasonik** untuk mengukur ketinggian tumpukan sampah.
-    * Mengirimkan data ketinggian secara *real-time* ke **Aplikasi Dashboard** (Blynk, Firebase, dll) melalui Wi-Fi.
+2.  **Board 2: ESP32 (Level Monitoring)**
+    * Responsible for monitoring and IoT connectivity.
+    * Reads **Ultrasonic Sensors** to measure the waste pile level.
+    * Sends level data in *real-time* to a **Dashboard Application** (Blynk, Firebase, etc.) via Wi-Fi.
 
 ---
 
-## 📂 Struktur Folder Proyek
+## 📂 Project Folder Structure
 
 * **/trashbin/**
-    * Berisi kode `.ino` yang di-upload ke **ESP32-CAM**.
-    * Kode ini mencakup inferensi model Edge Impulse dan logika kontrol motor servo.
+    * Contains the `.ino` code to be uploaded to the **ESP32-CAM**.
+    * This code includes the Edge Impulse model inference and servo motor control logic.
 * **/Monitoring/**
-    * Berisi kode `.ino` yang di-upload ke **ESP32 standar**.
-    * Kode ini mencakup pembacaan sensor ultrasonik dan pengiriman data ke aplikasi (Blynk/Firebase/dll).
+    * Contains the `.ino` code to be uploaded to the **standard ESP32**.
+    * This code includes ultrasonic sensor readings and data transmission to the application (Blynk/Firebase/etc.).
 * **/Collect_Images_for_EdgeImpulse/**
-    * Berisi kode `.ino` khusus untuk **ESP32-CAM** yang hanya digunakan saat proses pengambilan *datasheet* (gambar latihan) untuk Edge Impulse.
+    * Contains a specific `.ino` code for the **ESP32-CAM** used only during the process of collecting a *datasheet* (training images) for Edge Impulse.
 * **/library_edge_impulse_model/**
-    * **FOLDER KOSONG (Placeholder):** buat folder kosong disinilah Anda harus meletakkan *library* model `.zip` yang telah Anda *download* dari Edge Impulse.
+    * **EMPTY FOLDER (Placeholder):** create an empty folder; this is where you must place the model *library* `.zip` file that you download from Edge Impulse.
 
 ---
 
-## ⚙️ Kebutuhan Hardware & Software
+## ⚙️ Hardware & Software Requirements
 
 ### Hardware
-* **Board 1:** 1x **ESP32-CAM** (dengan modul programmer FTDI).
-* **Board 2:** 1x **ESP32** (NodeMCU, WROOM, atau sejenisnya).
-* **Sensor:** 2x **Sensor Ultrasonik** (misal: HC-SR04).
-* **Aktuator:** 2x **Motor Servo** (misal: SG90).
-* **Catu Daya:** Catu daya 5V yang stabil (disarankan 2A atau lebih, untuk memberi daya kedua board dan servo).
-* Kabel Jumper, LED, Resistor, dll.
+* **Board 1:** 1x **ESP32-CAM** (with FTDI programmer module).
+* **Board 2:** 1x **ESP32** (NodeMCU, WROOM, or similar).
+* **Sensors:** 2x **Ultrasonic Sensors** (e.g., HC-SR04).
+* **Actuators:** 2x **Servo Motors** (e.g., SG90).
+* **Power Supply:** A stable 5V power supply (2A or more recommended, to power both boards and servos).
+* Jumper Wires, LEDs, Resistors, etc.
 
 ### Software
 * [Arduino IDE](https://www.arduino.cc/en/software)
-* Driver Board **ESP32** untuk Arduino IDE.
-* **Library Model Edge Impulse** (Dibuat di Langkah 1).
-* Library Sensor (misal: `NewPing` untuk ultrasonik).
-* Library Aplikasi (misal: `BlynkSimpleEsp32.h`, `Firebase_ESP_Client.h`, dll. *Hanya diinstal untuk kode ESP32*).
+* **ESP32** Board Driver for Arduino IDE.
+* **Edge Impulse Model Library** (Created in Step 1).
+* Sensor Libraries (e.g., `NewPing` for ultrasonic).
+* Application Libraries (e.g., `BlynkSimpleEsp32.h`, `Firebase_ESP_Client.h`, etc. *Only installed for the ESP32 code*).
 
 ---
 
-## 🔌 Rangkaian & Pinout
+## 🔌 Schematics & Pinout
 
-Berikut adalah skematik rangkaian dan detail pinout yang digunakan dalam proyek ini.
+Here is the circuit schematic and pinout details used in this project.
 
-![Skematik Rangkaian](/Skematik/Skematic.png)
+![Circuit Schematic](/Skematik/Skematic.png)
 
-### 1. Board 1: ESP32-CAM (Pemilah Sampah)
-| Komponen | Pin Kontrol |
+### 1. Board 1: ESP32-CAM (Waste Sorter)
+| Component | Control Pin |
 | :--- | :--- |
 | Servo 1 | GPIO 14 |
 | Servo 2 | GPIO 15 |
 | Power | VCC (+5V) & GND |
 
-### 2. Board 2: ESP32 (Monitoring Ketinggian)
-| Komponen | Pin Trigger | Pin Echo |
+### 2. Board 2: ESP32 (Level Monitoring)
+| Component | Trigger Pin | Echo Pin |
 | :--- | :--- | :--- |
-| Sensor Ultrasonik 1 | GPIO 21 | GPIO 19 |
-| Sensor Ultrasonik 2 | GPIO 5 | GPIO 18 |
+| Ultrasonic Sensor 1 | GPIO 21 | GPIO 19 |
+| Ultrasonic Sensor 2 | GPIO 5 | GPIO 18 |
 | Power | VCC (+5V) & GND |
 
-**Catatan Penting:** Pastikan **GND** dari catu daya 5V, **GND** ESP32-CAM, dan **GND** ESP32 terhubung semua menjadi satu **Common Ground**.
+**Important Note:** Ensure the **GND** from the 5V power supply, the **GND** of the ESP32-CAM, and the **GND** of the ESP32 are all connected to a single **Common Ground**.
 
 ---
 
-## 🚀 Langkah-Langkah Implementasi
+## 🚀 Implementation Steps
 
-Proyek ini dibagi menjadi dua alur kerja paralel untuk masing-masing board.
+This project is divided into two parallel workflows for each board.
 
-### Bagian 1: (Wajib) Melatih Model untuk ESP32-CAM
+### Part 1: (Required) Train the Model for ESP32-CAM
 
-1.  **Kumpulkan Dataset:**
-    * Buka folder `/Collect_Images_for_EdgeImpulse/`.
-    * Upload kodenya ke **ESP32-CAM** Anda.
-    * Gunakan skrip ini untuk mengambil banyak gambar *datasheet* (latihan) untuk setiap kategori sampah.
-2.  **Upload & Latih di Edge Impulse:**
-    * Buat proyek *Image Classification* baru di [Edge Impulse](https://www.edgeimpulse.com/).
-    * Upload semua gambar Anda dan beri **Label** yang benar.
-    * Buat *Impulse* (misal: `96x96`, `Image`, `Classification`).
-    * Latih model Anda di tab "Classifier".
+1.  **Collect Dataset:**
+    * Open the `/Collect_Images_for_EdgeImpulse/` folder.
+    * Upload the code to your **ESP32-CAM**.
+    * Use this script to take many *datasheet* (training) images for each waste category.
+2.  **Upload & Train on Edge Impulse:**
+    * Create a new *Image Classification* project on [Edge Impulse](https://www.edgeimpulse.com/).
+    * Upload all your images and assign the correct **Label**.
+    * Create an *Impulse* (e.g., `96x96`, `Image`, `Classification`).
+    * Train your model in the "Classifier" tab.
 3.  **Deploy (Download Library):**
-    * Buka tab **Deployment**, pilih **Arduino**.
-    * Klik **Build** untuk men-download file `.zip` model Anda.
-    * Simpan file `.zip` ini di folder `/library_edge_impulse_model/` sebagai referensi.
+    * Go to the **Deployment** tab, select **Arduino**.
+    * Click **Build** to download your model's `.zip` file.
+    * Save this `.zip` file in the `/library_edge_impulse_model/` folder for reference.
 
 ---
 
-### Bagian 2: Setup ESP32-CAM (Pemilah Sampah)
+### Part 2: Setup ESP32-CAM (Waste Sorter)
 
-1.  **Install Library Model:**
-    * Buka Arduino IDE.
-    * Pilih **Sketch** > **Include Library** > **Add .ZIP Library...**
-    * Pilih file `.zip` yang Anda download dari Edge Impulse (Langkah 1).
-2.  **Buka Proyek Pemilah:**
-    * Buka file `.ino` dari dalam folder library nanti akan ada kode ino hasil training atau gunakan code /trashbin.ino lalu add library
-3.  **Konfigurasi Kode:**
-    * Sesuaikan pin untuk **Motor Servo** (`SERVO_PIN`) agar sesuai dengan rangkaian Anda (Pin 14 dan 15 berdasarkan skematik).
-4.  **Upload Kode:**
-    * Hubungkan **ESP32-CAM** (gunakan FTDI programmer).
-    * Pilih *board* "AI Thinker ESP32-CAM" dan port yang benar.
-    * Upload kode.
-    * **Catatan:** Board ini sekarang akan fokus menjalankan inferensi dan menggerakkan servo.
+1.  **Install the Model Library:**
+    * Open the Arduino IDE.
+    * Select **Sketch** > **Include Library** > **Add .ZIP Library...**
+    * Choose the `.zip` file you downloaded from Edge Impulse (Part 1).
+2.  **Open the Sorter Project:**
+    * Open the `.ino` file from the library folder (it will contain the training result code) or use the `/trashbin/` code and add the library.
+3.  **Code Configuration:**
+    * Adjust the **Servo Motor** pins (`SERVO_PIN`) to match your circuit (Pins 14 and 15 based on the schematic).
+4.  **Upload the Code:**
+    * Connect the **ESP32-CAM** (using an FTDI programmer).
+    * Select the "AI Thinker ESP32-CAM" board and the correct port.
+    * Upload the code.
+    * **Note:** This board will now focus on running inference and controlling the servos.
 
 ---
 
-### Bagian 3: Setup ESP32 (Monitoring Ketinggian)
+### Part 3: Setup ESP32 (Level Monitoring)
 
-1.  **Install Library Pendukung:**
-    * Buka Arduino IDE.
-    * Gunakan Library Manager untuk menginstal library sensor `NewPing` dan library aplikasi Anda (misal: `Blynk`).
-2.  **Buka Proyek Monitoring:**
-    * Buka file `.ino` dari dalam folder `/Monitoring/`.
-3.  **Konfigurasi Kode:**
-    * **Kredensial:** Masukkan `SSID` dan `PASSWORD` WiFi Anda.
-    * **Koneksi Aplikasi:** Masukkan *Auth Token* atau *API Key* untuk aplikasi Anda (misal: Blynk, Firebase).
-    * **Pinout:** Sesuaikan pin untuk Sensor Ultrasonik (`TRIG_PIN`, `ECHO_PIN`) agar sesuai dengan skematik (Pin 21, 19, 5, 18).
-4.  **Upload Kode:**
-    * Hubungkan **ESP32 standar** Anda.
-    * Pilih *board* yang sesuai (misal: "NodeMCU-32S" atau "ESP32 Dev Module").
-    * Upload kode.
+1.  **Install Supporting Libraries:**
+    * Open the Arduino IDE.
+    * Use the Library Manager to install the `NewPing` sensor library and your application library (e.g., `Blynk`).
+2.  **Open the Monitoring Project:**
+    * Open the `.ino` file from the `/Monitoring/` folder.
+3.  **Code Configuration:**
+    * **Credentials:** Enter your Wi-Fi `SSID` and `PASSWORD`.
+    * **Application Connection:** Enter the *Auth Token* or *API Key* for your application (e.g., Blynk, Firebase).
+    * **Pinout:** Adjust the Ultrasonic Sensor pins (`TRIG_PIN`, `ECHO_PIN`) to match the schematic (Pins 21, 19, 5, 18).
+4.  **Upload the Code:**
+    * Connect your **standard ESP32**.
+    * Select the appropriate board (e.g., "NodeMCU-32S" or "ESP32 Dev Module").
+    * Upload the code.
 
-### Bagian 4: Uji Coba
+### Part 4: Testing
 
-1.  Nyalakan kedua perangkat.
-2.  **ESP32** akan terhubung ke WiFi dan mulai mengirim data ketinggian ke *dashboard* aplikasi Anda.
-3.  **ESP32-CAM** akan mulai menjalankan kamera dan model.
-4.  Arahkan sampah ke kamera, dan amati **servo** bergerak sesuai hasil klasifikasi (organik/anorganik).
-5.  Periksa *dashboard* Anda untuk melihat data ketinggian sampah.
+1.  Power on both devices.
+2.  The **ESP32** will connect to Wi-Fi and start sending level data to your application dashboard.
+3.  The **ESP32-CAM** will start running the camera and the model.
+4.  Point waste at the camera, and observe the **servos** move according to the classification (organic/inorganic).
+5.  Check your *dashboard* to see the waste level data.
 
-## 📄 Lisensi
+## 📄 License
 MIT License.
