@@ -54,7 +54,7 @@ Proyek ini menggunakan arsitektur **dua mikrokontroler** untuk menciptakan siste
 
 Berikut adalah skematik rangkaian dan detail pinout yang digunakan dalam proyek ini.
 
-![Skematik Rangkaian](Skematic.png)
+![Skematik Rangkaian](/Skematik/Skematic.png)
 
 ### 1. Board 1: ESP32-CAM (Pemilah Sampah)
 | Komponen | Pin Kontrol |
