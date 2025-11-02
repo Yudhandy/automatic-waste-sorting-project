@@ -21,14 +21,11 @@ Proyek ini menggunakan arsitektur **dua mikrokontroler** untuk menciptakan siste
 * **/trashbin/**
     * Berisi kode `.ino` yang di-upload ke **ESP32-CAM**.
     * Kode ini mencakup inferensi model Edge Impulse dan logika kontrol motor servo.
-
 * **/Monitoring/**
     * Berisi kode `.ino` yang di-upload ke **ESP32 standar**.
     * Kode ini mencakup pembacaan sensor ultrasonik dan pengiriman data ke aplikasi (Blynk/Firebase/dll).
-
 * **/Collect_Images_for_EdgeImpulse/**
     * Berisi kode `.ino` khusus untuk **ESP32-CAM** yang hanya digunakan saat proses pengambilan *datasheet* (gambar latihan) untuk Edge Impulse.
-
 * **/library_edge_impulse_model/**
     * **FOLDER KOSONG (Placeholder):** buat folder kosong disinilah Anda harus meletakkan *library* model `.zip` yang telah Anda *download* dari Edge Impulse.
 
@@ -39,8 +36,8 @@ Proyek ini menggunakan arsitektur **dua mikrokontroler** untuk menciptakan siste
 ### Hardware
 * **Board 1:** 1x **ESP32-CAM** (dengan modul programmer FTDI).
 * **Board 2:** 1x **ESP32** (NodeMCU, WROOM, atau sejenisnya).
-* **Sensor:** 1x **Sensor Ultrasonik** (misal: HC-SR04).
-* **Aktuator:** 1x **Motor Servo** (misal: SG90).
+* **Sensor:** 2x **Sensor Ultrasonik** (misal: HC-SR04).
+* **Aktuator:** 2x **Motor Servo** (misal: SG90).
 * **Catu Daya:** Catu daya 5V yang stabil (disarankan 2A atau lebih, untuk memberi daya kedua board dan servo).
 * Kabel Jumper, LED, Resistor, dll.
 
@@ -50,6 +47,30 @@ Proyek ini menggunakan arsitektur **dua mikrokontroler** untuk menciptakan siste
 * **Library Model Edge Impulse** (Dibuat di Langkah 1).
 * Library Sensor (misal: `NewPing` untuk ultrasonik).
 * Library Aplikasi (misal: `BlynkSimpleEsp32.h`, `Firebase_ESP_Client.h`, dll. *Hanya diinstal untuk kode ESP32*).
+
+---
+
+## 🔌 Rangkaian & Pinout
+
+Berikut adalah skematik rangkaian dan detail pinout yang digunakan dalam proyek ini.
+
+![Skematik Rangkaian](image_af81c0.png)
+
+### 1. Board 1: ESP32-CAM (Pemilah Sampah)
+| Komponen | Pin Kontrol |
+| :--- | :--- |
+| Servo 1 | GPIO 14 |
+| Servo 2 | GPIO 15 |
+| Power | VCC (+5V) & GND |
+
+### 2. Board 2: ESP32 (Monitoring Ketinggian)
+| Komponen | Pin Trigger | Pin Echo |
+| :--- | :--- | :--- |
+| Sensor Ultrasonik 1 | GPIO 21 | GPIO 19 |
+| Sensor Ultrasonik 2 | GPIO 5 | GPIO 18 |
+| Power | VCC (+5V) & GND |
+
+**Catatan Penting:** Pastikan **GND** dari catu daya 5V, **GND** ESP32-CAM, dan **GND** ESP32 terhubung semua menjadi satu **Common Ground**.
 
 ---
 
@@ -84,7 +105,7 @@ Proyek ini dibagi menjadi dua alur kerja paralel untuk masing-masing board.
 2.  **Buka Proyek Pemilah:**
     * Buka file `.ino` dari dalam folder library nanti akan ada kode ino hasil training atau gunakan code /trashbin.ino lalu add library
 3.  **Konfigurasi Kode:**
-    * Sesuaikan pin untuk **Motor Servo** (`SERVO_PIN`) agar sesuai dengan rangkaian Anda.
+    * Sesuaikan pin untuk **Motor Servo** (`SERVO_PIN`) agar sesuai dengan rangkaian Anda (Pin 14 dan 15 berdasarkan skematik).
 4.  **Upload Kode:**
     * Hubungkan **ESP32-CAM** (gunakan FTDI programmer).
     * Pilih *board* "AI Thinker ESP32-CAM" dan port yang benar.
@@ -103,7 +124,7 @@ Proyek ini dibagi menjadi dua alur kerja paralel untuk masing-masing board.
 3.  **Konfigurasi Kode:**
     * **Kredensial:** Masukkan `SSID` dan `PASSWORD` WiFi Anda.
     * **Koneksi Aplikasi:** Masukkan *Auth Token* atau *API Key* untuk aplikasi Anda (misal: Blynk, Firebase).
-    * **Pinout:** Sesuaikan pin untuk Sensor Ultrasonik (`TRIG_PIN`, `ECHO_PIN`).
+    * **Pinout:** Sesuaikan pin untuk Sensor Ultrasonik (`TRIG_PIN`, `ECHO_PIN`) agar sesuai dengan skematik (Pin 21, 19, 5, 18).
 4.  **Upload Kode:**
     * Hubungkan **ESP32 standar** Anda.
     * Pilih *board* yang sesuai (misal: "NodeMCU-32S" atau "ESP32 Dev Module").
