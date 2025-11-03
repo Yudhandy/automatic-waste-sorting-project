@@ -42,7 +42,7 @@ This project uses a **dual-microcontroller** architecture to create an efficient
 * Jumper Wires, LEDs, Resistors, etc.
 
 ### Software
-* ![Arduino IDE](https://www.arduino.cc/en/software)
+* [Arduino IDE](https://www.arduino.cc/en/software)
 * **ESP32** Board Driver for Arduino IDE.
 * **Edge Impulse Model Library** (Created in Step 1).
 * Sensor Libraries (e.g., `NewPing` for ultrasonic).
@@ -85,7 +85,7 @@ This project is divided into two parallel workflows for each board.
     * Upload the code to your **ESP32-CAM**.
     * Use this script to take many *datasheet* (training) images for each waste category.
 2.  **Upload & Train on Edge Impulse:**
-    * Create a new *Image Classification* project on ![Edge Impulse](https://www.edgeimpulse.com/).
+    * Create a new *Image Classification* project on [Edge Impulse](https://www.edgeimpulse.com/).
     * Upload all your images and assign the correct **Label**.
     * Create an *Impulse* (e.g., `96x96`, `Image`, `Classification`).
     * Train your model in the "Classifier" tab.
